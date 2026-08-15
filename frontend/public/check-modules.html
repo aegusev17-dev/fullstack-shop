@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Module Checker</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #888; }
+        pre { background: #333; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Module Checker</h1>
+    <div id="results">Проверка модулей...</div>
+    <pre id="output"></pre>
+
+    <script type="module">
+        const output = document.getElementById('output');
+        const log = (msg, type = 'info') => {
+            output.innerHTML += `<span class="${type}">${msg}</span>\n`;
+        };
+
+        log('🚀 Запуск проверки...', 'info');
+        
+        // Список модулей для проверки
+        const modules = [
+            'axios',
+            'vue',
+            'pinia',
+            'vue-router',
+            '@vitejs/plugin-vue',
+            'tailwindcss'
+        ];
+
+        // Проверка npm пакетов
+        modules.forEach(mod => {
+            try {
+                const modulePath = mod.replace('@', 'node_modules/@');
+                log(`✅ ${mod} - найден`, 'success');
+            } catch {
+                log(`❌ ${mod} - не найден`, 'error');
+            }
+        });
+
+        // Проверка импортов
+        log('\n📁 Проверка локальных импортов...', 'info');
+        
+        const localModules = [
+            '@/api/client.http.api',
+            '@/api/admin/user.api',
+            '@/api/shop/user.api',
+            '@/stores/store.user',
+            '@/stores/store.app',
+            '@/router/index'
+        ];
+
+        localModules.forEach(async (mod) => {
+            try {
+                const module = await import(mod);
+                log(`✅ ${mod} - загружен`, 'success');
+                log(`   Экспорты: ${Object.keys(module).join(', ')}`, 'info');
+            } catch (error) {
+                log(`❌ ${mod} - ошибка: ${error.message}`, 'error');
+            }
+        });
+
+        // Информация о проекте
+        log('\n📊 Информация о проекте:', 'info');
+        log(`   Версия Node: ${window.navigator.userAgent}`, 'info');
+        log(`   Режим Vite: ${import.meta.env.MODE}`, 'info');
+        log(`   Базовый URL: ${import.meta.env.BASE_URL}`, 'info');
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "fullstack-shop",
+  "version": "1.0.0",
+  "description": "Full-stack shop with Vue 3 + Node.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npx nodemon server.js",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build": "cd frontend && npm run build",
+    "start": "node backend/server.js",
+    "check:modules": "cd frontend && npm run check:modules"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
